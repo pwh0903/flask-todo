@@ -1,6 +1,6 @@
 
 # 小应用
-```
+```python
 # 导入Flask类,这个类的实例将作为WSGI应用
 from flask import Flask
 
@@ -29,7 +29,7 @@ flask run
 
 # 路由
 route()装饰器用来将函数绑定到URL
-```
+```python
 @app.route('/')
 def index():
      return 'Index Page'
@@ -41,7 +41,7 @@ def hello():
 
 ## 变量规则
 匹配变量以及变量转换
-```
+```python
 @app.route('/user/<username>')
 def show_user_profile(username):
      return 'User %s' % username
@@ -52,7 +52,7 @@ def show_post(post_id):
 ```
 
 ## 唯一URL/重定向
-```
+```python
 # 访问不带/的URL会重定向到带/的URL
 @app.route('/projects/')
 def projects():
@@ -66,7 +66,7 @@ def about():
 
 ## URL构建
 使用url_for()生成URL
-```
+```python
 from flask import Flask, url_for
 app = Flask(__name__)
 @app.route('/')
@@ -93,7 +93,7 @@ with app.test_request_context():
 
 # HTTP方法
 默认只响应GET请求,可以通过route()装饰器的method参数定义
-```
+```python
 from flask import request
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -106,7 +106,7 @@ def login():
 
 # 静态文件
 在项目目录下创建static目录,可以用/static访问
-```
+```python
 # static/style.css
 url_for('static', filename='style.css')
 ```
@@ -123,7 +123,7 @@ render_template()方法,Flask在templates目录下查找模板
      /__init__.py
      /templates
           /hello.html
-```
+```python
 from flask import render_template
 
 @app.route('/hello/')
@@ -132,7 +132,7 @@ def hello(name=None):
      return render_template('hello.html', name=name)
 ```
 
-```
+```python
 # eg. 模板
 <!doctype html>
 <title>Hello from Flask</title>
@@ -146,7 +146,7 @@ def hello(name=None):
 # 获取请求数据
 
 ## Request对象
-```
+```python
 from flask import request
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -170,7 +170,7 @@ searchword = request.args.get('key', '')
 在HTML表单中设置enctype="multipart/form-data"
 上传的文件保存在内存或系统的临时目录中
 通过request对象的files属性访问文件,和file对象类型,另外有一个save()方法
-```
+```python
 from flask import request
 
 @app.route('/upload', methods=['GET', 'POST'])
@@ -195,7 +195,7 @@ def upload_file():
 通过cookies属性获取request的cookies,是一个字典,包含了客户端发送的所有cookies
 通过response对象的set_cookie方法设置cookies
 如果想使用session,使用Flask的Session而不是直接使用cookies,更加安全
-```
+```python
 from flask import request
 
 # 获取cookies
@@ -215,7 +215,7 @@ def index():
 # 重定向和错误
 redirect()
 abort()
-```
+```python
 from flask import abort, redirect, url_for
 
 @app.route('/')
