@@ -239,7 +239,60 @@ def page_not_found(error):
 从view函数返回的值自动转成response对象
 返回值为string时,转变成response对象,string是response body,状态码200,mimetype为text/html
 Flask应用于将返回值转换为response对象的逻辑如下
-1.
+1.如果返回正确类型的响应对象,则从视图直接返回
+2.如果是字符串,使用该数据和默认参数创建response对象
+3.如果返回一个元组,元组中的item可以提供额外信息,这样的元组必须是以下类型
+(response, status, headers) 或 (response, headers)
+status的值会覆盖status状态码
+4.如果不符合上述,Flask会认为返回值是一个有效的WSGI应用,转换成response对象
+如果要在视图中获取生成的response对象,可以使用make_response方法
+```python
+@app.errorhandler(404)
+def not_found(error):
+     resp = make_response(render_template('error.html'), 404)
+     resp.headers['X-somthing'] = 'A value'
+     return resp
+```
+
+# 会话
+```python
+from flask import Flask, session, redirect, url_for, escape, request
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+     if 'username' in session:
+          # 如果不使用模板,使用escape进行转义
+          return 'Logged in as %s' % escape(session['username'])
+     return 'You are not logged in'
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+     if request.method == 'POST':
+          session['username'] = request.form['username']
+          return redirect(url_for('index'))
+     return '''
+          <form method="post">
+               <p><input type=text name=username>
+               <p><input type=submit value=Login>
+          </form>
+     '''
+
+@app.route('/logout')
+def logout():
+     # 删除会话中的username
+     session.pop('username', None)
+     return redirect(url_for('index'))
+
+# 设置密钥
+app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+
+# 生成密钥
+import os 
+os.urandom(24)
+```
+
 
 
 
